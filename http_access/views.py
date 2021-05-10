@@ -35,7 +35,7 @@ def return_file(request, storage_name: str, path: str) -> Union[HttpResponseNotF
         response['Access-Control-Allow-Origin'] = '*'
         response['Accept-Ranges'] = 'bytes'
         response['Access-Control-Allow-Methods']= 'POST, GET, OPTIONS'
-        response['Access-Control-Allow-Headers']= 'X-PINGOTHER, Content-Type'
+        response['Access-Control-Allow-Headers']= 'X-PINGOTHER, Content-Type, Range'
         response['Access-Control-Max-Age']= '86400'
 
         return response
