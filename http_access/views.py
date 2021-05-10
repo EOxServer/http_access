@@ -17,24 +17,29 @@ def return_file(request, storage_name: str, path: str) -> Union[HttpResponseNotF
         ranges = request.headers.get("Range", None)
         _, ranges = parse_ranges(ranges)
 
-
+        size = verify_file(data_item, ranges)
         if request.method == 'GET':
-            if ranges:
-                size = verify_file(data_item, ranges)
             response = StreamingHttpResponse(iter_file(data_item, ranges=ranges))
             if not ranges:
                 response['Content-Type'] = 'image/tiff'
+            elif len(ranges) == 1:
+                _r = ranges[0]
+                response['Content-Type'] = 'image/tiff'
+                response['Content-Range'] = f'bytes {_r[0]}-{_r[1]}/{size}'
+                response.status_code = 206
             else:
                 boundary = generate_boundary()
                 response.streaming_content = wrap_streaming_content(response.streaming_content, ranges, boundary, size)
                 response['Content-Type'] = f'multipart/byteranges; boundary={boundary.decode()}'
                 response.status_code = 206
         else:
-            response = HttpResponse('<h1>Test<h1>')
+            response = HttpResponse('')
+            response['Content-Type'] = 'image/tiff'
+            response['Content-Length'] = str(size)
 
         response['Access-Control-Allow-Origin'] = '*'
         response['Accept-Ranges'] = 'bytes'
-        response['Access-Control-Allow-Methods']= 'POST, GET, OPTIONS'
+        response['Access-Control-Allow-Methods']= 'POST, GET, OPTIONS, HEAD'
         response['Access-Control-Allow-Headers']= 'X-PINGOTHER, Content-Type, Range'
         response['Access-Control-Max-Age']= '86400'
 

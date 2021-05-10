@@ -17,12 +17,12 @@ def iter_file(data_item: coverages.ArrayDataItem, ranges: List[Tuple]=None, chun
                 bottom = _r[0]
                 top = _r[1]
 
-                if bottom and top:
+                if bottom is not None and top is not None:
                     r.seek(bottom, 0)
                     while bottom < top:
-                        yield r.read(min(top - bottom, chunk_size))
+                        yield r.read(min(top - bottom + 1, chunk_size))
                         bottom += chunk_size
-                elif bottom and not top:
+                elif bottom is not None and top is None:
                     r.seek(bottom, 0)
                     while True:
                         data = r.read(chunk_size)
@@ -30,7 +30,7 @@ def iter_file(data_item: coverages.ArrayDataItem, ranges: List[Tuple]=None, chun
                             break
                         yield data
 
-                elif not bottom and top:
+                elif bottom is None and top is not None:
                     r.seek(-top, 2)
                     while True:
                         data = r.read(chunk_size)
@@ -46,7 +46,7 @@ def iter_file(data_item: coverages.ArrayDataItem, ranges: List[Tuple]=None, chun
                     break
                 yield data
 
-def parse_ranges(ranges: Union[str, None]) -> Tuple[str, List[Tuple[Union[int, None]]]]:
+def parse_ranges(ranges: Union[str, None]) -> Tuple[str, List]:
     if ranges:
         ranges = re.match(r'bytes=((\d*-\d*,?)+)', ranges)
         if not ranges:
@@ -77,7 +77,7 @@ def parse_ranges(ranges: Union[str, None]) -> Tuple[str, List[Tuple[Union[int, N
 
         return units, range_list
     
-    return None, None
+    return None, []
 
 def wrap_streaming_content(content: map, ranges: List[Tuple], boundary: str, size: str='*') -> Generator:
     for chunk, _r in zip(content, ranges):
@@ -85,7 +85,7 @@ def wrap_streaming_content(content: map, ranges: List[Tuple], boundary: str, siz
     yield b'--' + boundary + b'--'
 
 def wrap_chunk(chunk: bytes, _r: Tuple[int], boundary: str, size: str='*') -> bytes:
-    type = b'Content-Type: application/octet-stream\n'
+    type = b'Content-Type: image/tiff\n'
     range = f'Content-Range: bytes {_r[0] or ""}-{_r[1] or ""}/{size}\n'.encode()
     chunk = b'--' + boundary + b'\n' + type + range + b'\n' + chunk + b'\n'
     return chunk
@@ -95,7 +95,7 @@ def generate_boundary() -> str:
     result_str = ''.join(random.sample(characters, 8))
     return str.encode(result_str)
 
-def verify_file(data_item, ranges: List[Tuple]):
+def verify_file(data_item, ranges: List[Tuple]=[]):
     with vsi_open(data_item) as r:  
         r.seek(0, 2)
         size = r.tell()
