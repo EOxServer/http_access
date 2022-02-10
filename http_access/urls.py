@@ -4,5 +4,6 @@ from . import views
 
 app_name = "http_access"
 urlpatterns = [
-    path("<str:storage_name>/<path:path>", views.return_file, name="file"),
+    path("storage/<str:storage_name>/<path:path>", views.return_file, name="file"),
+    path("local/<path:path>", views.return_file, name="file-local"),
 ]
