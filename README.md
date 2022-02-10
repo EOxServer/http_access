@@ -8,6 +8,7 @@ raster data.
 To add to a django instance, edit the following files:
 
 `settings.py`
+
 ```python
 INSTALLED_APPS = (
     ...
@@ -16,11 +17,14 @@ INSTALLED_APPS = (
 ```
 
 `urls.py`
+
 ```python
+
 urlpatterns = [
     ...
     re_path(r'^http/', include('http_access.urls'))
 ]
+
 ```
 
 ## Usage
