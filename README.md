@@ -35,5 +35,5 @@ curl -i -H "Range: bytes=15-60" http://host.com/http/storage/<STORAGE_NAME>/<PAT
 When the file is not located on a storage, but on a local filesystem, the following request is to be used:
 
 ```shell
-curl -i -H "Range: bytes=15-60" http://host.com/http/local/<STORAGE_NAME>/<PATH/TO/FILE>
+curl -i -H "Range: bytes=15-60" http://host.com/http/local/<PATH/TO/FILE>
 ```
