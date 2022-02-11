@@ -29,7 +29,7 @@ class HttpAccessResultItemFeedLinkGenerator:
             return get_coverage_links(request, item)
         elif isinstance(item, coverages.Product):
             links = []
-            for coverage in item.coverages:
+            for coverage in item.coverages.all():
                 links.extend(get_coverage_links(request, coverage))
             return links
         return []
