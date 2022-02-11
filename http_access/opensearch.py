@@ -9,15 +9,18 @@ from .views import return_file
 def get_coverage_links(request, coverage: coverages.Coverage) -> List[Tuple[str, str]]:
     links = []
     for array_data_item in coverage.arraydata_items.all():
-        storage_name = None
         if array_data_item.storage:
             storage_name = array_data_item.storage.name
-        href = request.build_absolute_uri(
-            reverse(
-                return_file,
+            url = reverse(
+                "http_access:file",
                 kwargs={"storage_name": storage_name, "path": array_data_item.location},
             )
-        )
+        else:
+            url = reverse(
+                "http_access:file-local",
+                kwargs={"path": array_data_item.location},
+            )
+        href = request.build_absolute_uri(url)
         links.append(("via", href))
 
     return links
