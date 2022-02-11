@@ -8,7 +8,7 @@ from .views import return_file
 
 def get_coverage_links(request, coverage: coverages.Coverage) -> List[Tuple[str, str]]:
     links = []
-    for array_data_item in coverage.array_data_items:
+    for array_data_item in coverage.arraydata_items.all():
         storage_name = None
         if array_data_item.storage:
             storage_name = array_data_item.storage.name
