@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="http_access",
-    version="0.1.2",
+    version="0.1.3",
     author="Nikola Jankovic",
     author_email="nikola.jankovic@eox.at",
     description="http direct access django app",
@@ -17,6 +17,6 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
-    zip_safe=False
+    python_requires=">=3.6",
+    zip_safe=False,
 )
