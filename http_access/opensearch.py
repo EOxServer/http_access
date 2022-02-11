@@ -3,8 +3,6 @@ from typing import List, Tuple
 from django.urls import reverse
 from eoxserver.resources.coverages import models as coverages
 
-from .views import return_file
-
 
 def get_coverage_links(request, coverage: coverages.Coverage) -> List[Tuple[str, str]]:
     links = []
