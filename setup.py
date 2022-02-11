@@ -5,11 +5,10 @@ with open("README.md", "r") as fh:
 
 setup(
     name="http_access",
-    version="0.1.0",
+    version="0.1.1",
     author="Nikola Jankovic",
     author_email="nikola.jankovic@eox.at",
     description="http direct access django app",
-    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/EOxServer/http_access",
     packages=find_packages(),
